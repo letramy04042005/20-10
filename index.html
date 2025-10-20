@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thiệp 20/10 - Chúc Mẹ</title>
+  <style>
+    :root {
+      --bg: #f6e9f8;
+      --card: #fff;
+      --accent: #ff6b9a;
+      --muted: #6b6b6b;
+    }
+    * { box-sizing: border-box }
+    body {
+      font-family: 'Segoe UI', Roboto, Arial;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, var(--bg), #fff);
+      overflow: hidden;
+    }
+
+    .stage {
+      width: 92vw;
+      max-width: 900px;
+      perspective: 1200px;
+    }
+
+    .card {
+      width: 100%;
+      height: 540px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s cubic-bezier(.2, .9, .3, 1);
+    }
+    .card.open { transform: rotateY(-180deg); }
+
+    .panel {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.12);
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .front {
+      background: radial-gradient(circle at 10% 20%, rgba(255,255,255,.6), transparent 10%),
+                  linear-gradient(135deg, #ffdbe3 0%, #fff0f6 100%);
+    }
+    .front .wrap { text-align: center; padding: 36px; }
+    .badge {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), #ff9ab8);
+      color: white;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 6px 18px rgba(255,107,154,.28)
+    }
+    h1 { margin: 22px 0 6px; font-size: 52px; line-height: 1; color: #8a2b4b; }
+    p.lead { margin: 0 0 22px; color: var(--muted); font-size: 18px }
+    .btns { display: flex; justify-content: center }
+    .btn {
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 6px 16px rgba(255,107,154,.25)
+    }
+
+    .back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #fff4f9 0%, #fff 100%);
+      padding: 28px;
+      position: relative;
+    }
+    .message {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    /* 🔸 PHẦN CHỈNH KHUNG ẢNH TRÁI TIM */
+    .photo {
+      width: 240px;
+      height: 240px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .heart-frame {
+      width: 100%;
+      height: 100%;
+      clip-path: path('M120 40 C100 0, 40 0, 40 60 C40 120, 120 200, 120 200 C120 200, 200 120, 200 60 C200 0, 140 0, 120 40 Z');
+      background: #fff0f6;
+      box-shadow: inset 0 0 20px rgba(0,0,0,.1), 0 6px 20px rgba(255,107,154,.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 20px; /* bo nhẹ viền tim */
+    }
+
+    .heart-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* ảnh nằm trọn trong tim */
+      border-radius: 20px;
+      transform: scale(1.05); /* phóng nhẹ cho khớp khung */
+    }
+
+    .text { flex: 1; }
+    .text h2 { margin: 0 0 10px; font-size: 28px; color: #8a2b4b }
+    .text p { margin: 0 0 12px; color: #524a55; font-size: 18px; line-height: 1.5 }
+    .signature { margin-top: 14px; font-style: italic; color: var(--muted) }
+
+    .hearts, .flowers, .fireworks { position: absolute; inset: 0; pointer-events: none }
+    .heart-dot, .flower-dot, .gift-dot { position: absolute; transform: translate(-50%, -50%); opacity: 0.9 }
+
+    canvas { position: absolute; inset: 0; pointer-events: none }
+
+    @media (max-width:700px) {
+      .card { height: 620px }
+      h1 { font-size: 42px }
+      .message { flex-direction: column; padding: 14px }
+      .photo { width: 200px; height: 200px }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="panel front">
+        <div class="wrap">
+          <div class="badge">Mừng ngày 20-10</div>
+          
+          <h1>Mẹ yêu của chúng con</h1>
+          <p>  </p>
+          <p class="lead">Một bất ngờ nhỏ — một tình yêu to. Mở thiệp mẹ nhé!👇</p>
+          <div class="btns"><button class="btn" id="openBtn">Mở thiệp</button></div>
+        </div>
+      </div>
+
+      <div class="panel back">
+        <div class="message">
+          <div class="photo">
+            <div class="heart-frame">
+              <img src="z7137813707842_6fc8e81fc6d4c0200e4a8b1c4bc57422.jpg" alt="Mẹ yêu" />
+            </div>
+          </div>
+          <div class="text">
+            <h2>Gửi Mẹ - Sếp tổng của cả nhà</h2>
+            <p>Ngày 20/10, con chúc Mẹ luôn khỏe mạnh, luôn xinh đẹp, tươi trẻ, vui vẻ, nhận thật nhiều yêu thương và thành công trong công việc, money đầy túi. Cảm ơn Mẹ vì tất cả. Chúng con yêu Mẹ rất nhiều!</p>
+            <div class="signature">— Love mom 💕</div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:18px;"><button class="btn" id="closeBtn">Đóng thiệp</button></div>
+        <div class="flowers" id="flowers"></div>
+        <div class="fireworks" id="fireworks"></div>
+      </div>
+
+      <div class="hearts" id="hearts"></div>
+      <canvas id="confetti"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const card = document.getElementById('card');
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const hearts = document.getElementById('hearts');
+    const flowers = document.getElementById('flowers');
+    const fireworks = document.getElementById('fireworks');
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas(){canvas.width = card.clientWidth; canvas.height = card.clientHeight;}
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+    function spawnHeart(){
+      const el = document.createElement('div');
+      el.className='heart-dot';
+      const size=12+Math.random()*18;
+      el.style.width=el.style.height=size+'px';
+      el.style.left=(30+Math.random()*70)+'%'; el.style.top=(60+Math.random()*30)+'%';
+      el.style.background=['#ff6b9a','#ff9ab8','#ffdbe3','#ffb3d1'][Math.floor(Math.random()*4)];
+      el.style.borderRadius='50%';
+      hearts.appendChild(el);
+      const dx=(Math.random()-0.5)*40, dy=-80-Math.random()*120, dur=2200+Math.random()*1400;
+      el.animate(
+        [{transform:'translate(0,0) scale(1)',opacity:1},
+         {transform:`translate(${dx}px, ${dy}px) scale(.6)`,opacity:0}],
+        {duration:dur,easing:'ease-out'}
+      ).onfinish=()=>el.remove();
+    }
+
+    function spawnFlower(){
+      const f=document.createElement('div');
+      f.className='flower-dot';
+      f.textContent=['🌸','🌺','🌼','🌷'][Math.floor(Math.random()*4)];
+      f.style.fontSize=(20+Math.random()*20)+'px';
+      f.style.left=(20+Math.random()*60)+'%'; f.style.top='80%';
+      flowers.appendChild(f);
+      const dx=(Math.random()-0.5)*80, dy=-150-Math.random()*150, dur=2500+Math.random()*2000;
+      f.animate(
+        [{transform:'translate(0,0)',opacity:1},
+         {transform:`translate(${dx}px, ${dy}px) rotate(${Math.random()*360}deg)`,opacity:0}],
+        {duration:dur,easing:'ease-out'}
+      ).onfinish=()=>f.remove();
+    }
+
+    function spawnGift(){
+      const g=document.createElement('div');
+      g.className='gift-dot';
+      g.textContent='🎁'; g.style.fontSize=(24+Math.random()*16)+'px';
+      g.style.left=(30+Math.random()*50)+'%'; g.style.top='80%';
+      flowers.appendChild(g);
+      const dx=(Math.random()-0.5)*60, dy=-200-Math.random()*120, dur=2500+Math.random()*2000;
+      g.animate(
+        [{transform:'translate(0,0)',opacity:1},
+         {transform:`translate(${dx}px, ${dy}px) rotate(${Math.random()*360}deg)`,opacity:0}],
+        {duration:dur,easing:'ease-out'}
+      ).onfinish=()=>g.remove();
+    }
+
+    function spawnFirework(){
+      const el=document.createElement('div');
+      el.className='fire-dot';
+      el.style.position='absolute'; el.style.left=(20+Math.random()*60)+'%'; el.style.top=(20+Math.random()*40)+'%';
+      el.style.width='6px'; el.style.height='6px'; el.style.borderRadius='50%'; el.style.background=['#ffd166','#6bcff6','#ff6b9a','#fff'][Math.floor(Math.random()*4)];
+      fireworks.appendChild(el);
+      el.animate(
+        [{transform:'scale(0)'},{transform:'scale(3)',opacity:0}],
+        {duration:800+Math.random()*500,easing:'ease-out'}
+      ).onfinish=()=>el.remove();
+    }
+
+    let confettis=[];
+    function makeConfetti(){const w=canvas.width,h=canvas.height;for(let i=0;i<80;i++){confettis.push({x:Math.random()*w,y:Math.random()*h/2,r:2+Math.random()*6,vx:(Math.random()-0.5)*3,vy:2+Math.random()*4,c:['#ff6b9a','#ffd166','#6bcff6','#ffdbe3'][Math.floor(Math.random()*4)]});}}
+    function renderConfetti(){if(!ctx)return;ctx.clearRect(0,0,canvas.width,canvas.height);for(let p of confettis){ctx.fillStyle=p.c;ctx.beginPath();ctx.ellipse(p.x,p.y,p.r*1.2,p.r,0,0,Math.PI*2);ctx.fill();p.x+=p.vx;p.y+=p.vy;p.vy+=0.02;if(p.y>canvas.height+20){p.y=-10;p.x=Math.random()*canvas.width;}}requestAnimationFrame(renderConfetti);}
+
+    function openCard() {
+      if (card.classList.contains('open')) return;
+      card.classList.add('open');
+
+      let count = 0;
+      const iv = setInterval(() => {
+        if (count % 3 === 0) spawnHeart();
+        if (count % 5 === 0) spawnFlower();
+        if (count % 8 === 0) spawnGift();
+        if (count % 7 === 0) spawnFirework();
+        count++;
+        if (count > 20) clearInterval(iv);
+      }, 300);
+
+      confettis = [];
+      makeConfetti();
+      renderConfetti();
+    }
+
+    function closeCard(){
+      card.classList.remove('open');
+      confettis=[];
+      if(ctx)ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+
+    openBtn.addEventListener('click',openCard);
+    closeBtn.addEventListener('click',closeCard);
+    openBtn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openCard();});
+    setInterval(spawnHeart,800);
+    window.addEventListener('load',resizeCanvas);
+  </script>
+</body>
+</html>
